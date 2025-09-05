@@ -1,552 +1,347 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Producción Calzado</title>
+    <title>Dashboard - Gestión de Construcción</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            font-family: 'Poppins', sans-serif;
+        * { font-family: 'Poppins', sans-serif; }
+        
+        :root {
+            --primary-color: #00BCD4;
+            --primary-dark: #0097A7;
+            --secondary-color: #E0F7FA;
+            --text-dark: #263238;
+            --text-light: #607D8B;
+            --border-color: #E0E0E0;
         }
-
+        
         body {
-            background-color: #faf8f5;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
         }
-
-        /* Header */
-        .header {
-            height: 70px;
-            background-color: #faf8f5;
-            border-bottom: 1px solid #e6e1db;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
+        
+        /* Sidebar Styles */
+        .sidebar {
+            background: linear-gradient(180deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            min-height: 100vh;
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            z-index: 1000;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: #333;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            top: 70px;
-            left: 0;
-            width: 80px;
-            height: calc(100vh - 70px);
-            background-color: #faf8f5;
-            border-right: 1px solid #e6e1db;
-            transition: width 0.3s ease;
-            z-index: 999;
-            overflow: hidden;
-        }
-
-        .sidebar:hover {
             width: 280px;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-            padding: 20px 0;
-            margin: 0;
-        }
-
-        .sidebar-section {
-            margin-bottom: 30px;
-        }
-
-        .sidebar-title {
-            color: #666;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 0 20px;
-            margin-bottom: 15px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .sidebar:hover .sidebar-title {
-            opacity: 1;
-        }
-
-        .sidebar-item {
-            margin: 8px 0;
-            position: relative;
-        }
-
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            padding: 15px 20px;
-            color: #333;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            border-radius: 0 25px 25px 0;
-            margin-right: 20px;
-            white-space: nowrap;
-            position: relative;
-        }
-
-        .sidebar-link:hover {
-            background-color: #e6e1db;
-            color: #333;
-            transform: translateX(5px);
-        }
-
-        .sidebar-link.active {
-            background-color: #d4c5b3;
-            color: #333;
-        }
-
-        .sidebar-icon {
-            font-size: 20px;
-            width: 40px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar-text {
-            margin-left: 15px;
-            opacity: 0;
-            transform: translateX(-20px);
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .sidebar:hover .sidebar-text {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        /* Tooltip para cuando está colapsado */
-        .sidebar-item::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            left: 90px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: #333;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            font-size: 14px;
             z-index: 1000;
-            pointer-events: none;
-        }
-
-        .sidebar-item::before {
-            content: '';
-            position: absolute;
-            left: 82px;
-            top: 50%;
-            transform: translateY(-50%);
-            border: 6px solid transparent;
-            border-right-color: #333;
-            opacity: 0;
-            visibility: hidden;
             transition: all 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
         }
+        .sidebar.collapsed { width: 100px; }
 
-        .sidebar:not(:hover) .sidebar-item:hover::after,
-        .sidebar:not(:hover) .sidebar-item:hover::before {
-            opacity: 1;
-            visibility: visible;
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-
-        .sidebar:hover .sidebar-item::after,
-        .sidebar:hover .sidebar-item::before {
-            opacity: 0;
-            visibility: hidden;
+        .sidebar-brand {
+            color: white; font-weight: 600; font-size: 1.2rem;
+            text-decoration: none; display: flex; align-items: center; gap: 10px;
         }
+        .sidebar.collapsed .brand-text { display: none; }
+        .nav-item { margin-bottom: 0.5rem; }
+        .nav-link {
+            color: rgba(255,255,255,0.8) !important;
+            padding: 1rem 1.5rem; border-radius: 10px; margin: 0 1rem;
+            transition: all 0.3s ease; display: flex; align-items: center; gap: 15px; text-decoration: none;
+        }
+        .nav-link:hover { background: rgba(255,255,255,0.1); color: #fff !important; transform: translateX(5px); }
+        .nav-link.active { background: rgba(255,255,255,0.2); color: #fff !important; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .sidebar.collapsed .nav-text { display: none; }
 
         /* Main Content */
-        .main-content {
-            margin-left: 80px;
-            margin-top: 70px;
-            padding: 30px;
-            transition: margin-left 0.3s ease;
-            min-height: calc(100vh - 70px);
+        .main-content { margin-left: 280px; padding: 2rem; transition: all 0.3s ease; }
+        .main-content.expanded { margin-left: 80px; }
+
+        /* Top Header */
+        .top-header {
+            background: white; padding: 1.5rem 2rem; border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem; display: flex;
+            justify-content: space-between; /* >>> corregido */
+            align-items: center;
         }
+        .toggle-btn {
+            background: var(--primary-color); border: none; color: white;
+            width: 50px; height: 50px; border-radius: 12px;
+            display: none; /* >>> oculto por defecto; visible solo en móvil */
+            align-items: center; justify-content: center; transition: all 0.3s ease;
+        }
+        .toggle-btn:hover { background: var(--primary-dark); transform: scale(1.05); }
+
+        /* Filter Section */
+        .filter-section {
+            background: white; padding: 2rem; border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 2rem;
+        }
+        .filter-title { color: var(--text-dark); font-weight: 600; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; }
+        .form-select, .btn { border-radius: 10px; padding: 0.75rem 1rem; border: 2px solid var(--border-color); font-weight: 500; }
+        .form-select:focus { border-color: var(--primary-color); box-shadow: 0 0 0 0.25rem rgba(0,188,212,0.25); }
+        .btn-primary { background: var(--primary-color); border-color: var(--primary-color); font-weight: 600; transition: all 0.3s ease; }
+        .btn-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); transform: translateY(-2px); }
+        .btn-outline-secondary { border-color: var(--text-light); color: var(--text-light); }
+        .btn-outline-secondary:hover { background: var(--text-light); border-color: var(--text-light); }
 
         /* Dashboard Cards */
-        .dashboard-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-            border: 1px solid #f0ede8;
-            margin-bottom: 20px;
-            height: 100%;
+        .dashboard-section {
+            background: white; padding: 2rem; border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 2rem;
         }
+        .section-title { color: var(--text-dark); font-weight: 600; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; }
+        .status-table { background: #f8f9fa; border-radius: 10px; overflow: hidden; }
+        .table th { background: var(--primary-color); color: white; font-weight: 600; border: none; padding: 1rem; }
+        .table td { padding: 1rem; border: none; border-bottom: 1px solid var(--border-color); }
+        .status-badge { padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.875rem; font-weight: 500; }
+        .status-inicio { background: #FFF3CD; color: #856404; }
+        .status-pendiente { background: #F8D7DA; color: #721C24; }
+        .status-progreso { background: #CCE5FF; color: #0056B3; }
+        .status-realizado { background: #D4EDDA; color: #155724; }
+        .progress-bar { background: var(--primary-color); }
 
-        .card-title {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 18px;
-        }
-
-        /* Progress Indicators */
-        .progress-container {
-            margin: 20px 0;
-        }
-
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .operation-name {
-            font-weight: 500;
-            color: #333;
-            display: flex;
-            align-items: center;
-        }
-
-        .operation-icon {
-            margin-right: 10px;
-            width: 20px;
-        }
-
-        .progress-value {
-            font-weight: 600;
-            color: #666;
-        }
-
-        .progress {
-            height: 12px;
+        /* Power BI Section */
+        .powerbi-placeholder {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px dashed var(--border-color);
             border-radius: 10px;
-            background-color: #f8f6f3;
+            padding: 3rem; text-align: center; color: var(--text-light);
+            min-height: 400px; display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
+        .powerbi-icon { font-size: 4rem; margin-bottom: 1rem; color: var(--primary-color); }
 
-        .progress-bar {
-            border-radius: 10px;
-            transition: width 0.6s ease;
-        }
-
-        /* Operation specific colors */
-        .corte .progress-bar {
-            background-color: #e74c3c;
-        }
-
-        .armado .progress-bar {
-            background-color: #3498db;
-        }
-
-        .solador .progress-bar {
-            background-color: #f39c12;
-        }
-
-        .emplantillado .progress-bar {
-            background-color: #27ae60;
-        }
-
-        /* Stats Cards */
-        .stat-card {
-            text-align: center;
-            padding: 20px;
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            color: #666;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .stat-trend {
-            font-size: 12px;
-            margin-top: 10px;
-        }
-
-        .trend-up {
-            color: #27ae60;
-        }
-
-        .trend-down {
-            color: #e74c3c;
-        }
-
-        /* Production Overview */
-        .production-overview {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-        }
-
-        .production-overview .card-title {
-            color: white;
-        }
-
-        /* Mobile Responsive */
+        /* Responsive */
         @media (max-width: 768px) {
-            .sidebar {
-                width: 0;
-                transform: translateX(-100%);
-            }
-
-            .sidebar.mobile-open {
-                width: 280px;
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 20px;
-            }
-
-            .header {
-                justify-content: space-between;
-                padding: 0 20px;
-            }
-
-            .mobile-toggle {
-                display: block;
-                background: none;
-                border: none;
-                color: white;
-                font-size: 24px;
-            }
-        }
-
-        @media (min-width: 769px) {
-            .mobile-toggle {
-                display: none;
-            }
-        }
-
-        /* Animation for progress bars */
-        .progress-bar {
-            animation: progressAnimation 2s ease-in-out;
-        }
-
-        @keyframes progressAnimation {
-            0% {
-                width: 0%;
-            }
-
-            100% {
-                width: var(--progress-width);
-            }
+            .sidebar { transform: translateX(-100%); } /* off-canvas */
+            .sidebar.show { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+            .main-content.expanded { margin-left: 0; }
+            .toggle-btn { display: flex; } /* >>> solo móvil muestra el botón */
         }
     </style>
 </head>
-
 <body>
-    <!-- Header -->
-    <div class="header">
-        <div class="logo">
-            <img src="images/logo.jpg" alt="Logo" style="height: 40px; vertical-align: center;">
-            Dashboard
-        </div>
-        <button class="mobile-toggle d-md-none" onclick="toggleSidebar()">
-            <i class="fas fa-bars"></i>
-        </button>
-    </div>
-
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
-        <ul class="sidebar-menu">
-            <li class="sidebar-section">
-                <div class="sidebar-title">Gestión</div>
-                <div class="sidebar-item" data-tooltip="Reportes"
-                    <a href="#" class="sidebar-link active" onclick="setActive(this)">
-                        <i class="sidebar-icon fas fa-chart-bar"></i>
-                        <span class="sidebar-text">Reportes</span>
-                    </a>
-                </div>
+        <div class="sidebar-header">
+            <a href="#" class="sidebar-brand">
+                <i class="fas fa-chart-line"></i>
+                <span class="brand-text">Dashboard</span>
+            </a>
+        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-section="gestion">
+                    <i class="fas fa-tasks"></i>
+                    <span class="nav-text">Gestión</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#" data-section="reportes">
+                    <i class="fas fa-chart-bar"></i>
+                    <span class="nav-text">Reportes</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-section="graficos">
+                    <i class="fas fa-chart-pie"></i>
+                    <span class="nav-text">Gráficos</span>
+                </a>
             </li>
         </ul>
     </div>
 
     <!-- Main Content -->
-    <div class="main-content">
-        <div class="container-fluid">
-            <div class="row mb-4">
-                <div class="col-12">
-                    <h1 class="mb-2">Panel de Control - Producción de Calzado</h1>
-                    <p class="text-muted">Monitoreo en tiempo real de las operaciones de producción</p>
+    <div class="main-content" id="mainContent">
+        <!-- Top Header -->
+        <div class="top-header">
+            <button class="toggle-btn" id="toggleBtn" aria-label="Abrir menú">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1 class="header-title h4">Panel de Control - Gestión de Produccion</h1>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <h5 class="filter-title">
+                <i class="fas fa-filter"></i>
+                Filtros de Búsqueda
+            </h5>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Lote</label>
+                    <select class="form-select" id="loteFilter">
+                        <option value="">Todos los lotes</option>
+                        <option value="19" selected>Lote # 19</option>
+                        <option value="18">Lote # 18</option>
+                        <option value="17">Lote # 17</option>
+                        <option value="16">Lote # 16</option>
+                        <option value="15">Lote # 15</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Cliente</label>
+                    <select class="form-select" id="proveedorFilter">
+                        <option value="">Todos los clientes</option>
+                        <option value="constructora_a">Cliente A</option>
+                        <option value="constructora_b">Cliente B</option>
+                        <option value="constructora_c">Cliente C</option>
+                    </select>
+                </div>
+                <div class="col-md-4 d-flex align-items-end gap-2">
+                    <button class="btn btn-primary flex-fill" onclick="aplicarFiltros()">
+                        <i class="fas fa-search me-2"></i>Filtrar
+                    </button>
+                    <button class="btn btn-outline-secondary" onclick="limpiarFiltros()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div id="dashboardContent">
+            <!-- Reportes Section -->
+            <div class="dashboard-section" id="reportes-section">
+                <h5 class="section-title">
+                    <i class="fas fa-clipboard-list"></i>
+                    Estado de Operaciones - <span id="loteActual">Lote # 19</span>
+                </h5>
+                
+                <div class="table-responsive status-table">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Operación</th>
+                                <th>Inicio</th>
+                                <th>Pendiente</th>
+                                <th>Progreso</th>
+                                <th>Realizado</th>
+                                <th>% Indicador de avance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="operacionesTable">
+                            <tr>
+                                <td class="fw-semibold">Corte</td>
+                                <td><span class="status-badge status-realizado">Completado</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td><i class="fas fa-check-circle text-success"></i></td>
+                                <td>
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar" style="width: 100%">100%</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-semibold">Armado</td>
+                                <td>-</td>
+                                <td><span class="status-badge status-progreso">En progreso</span></td>
+                                <td><i class="fas fa-clock text-warning"></i></td>
+                                <td>-</td>
+                                <td>
+                                     <div class="progress" style="height: 20px;">
+                                       <div class="progress-bar" style="width: 65%">75%</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-semibold">Solador</td>
+                                <td><span class="status-badge status-inicio">Por iniciar</span></td>
+                                <td>-</td>
+                                <td>
+                                    <div class="progress" style="height: 20px;">
+                                       <div class="progress-bar" style="width: 65%">55%</div>
+                                    </div>
+                                </td>
+                                <td>-</td>
+                                <td>
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar" style="width: 0%">40%</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-semibold">Emplantillado</td>
+                                <td><span class="status-badge status-pendiente">Pendiente</span></td>
+                                <td><i class="fas fa-exclamation-triangle text-warning"></i></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar" style="width: 15%">15%</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <!-- Stats Overview -->
-            <div class="row mb-4">
-                <div class="col-lg-3 col-md-6 mb-3">
-                    <div class="dashboard-card stat-card">
-                        <div class="stat-number text-primary">1,245</div>
-                        <div class="stat-label">Pares Producidos Hoy</div>
-                        <div class="stat-trend trend-up">
-                            <i class="fas fa-arrow-up me-1"></i>+8.5%
-                        </div>
+            <!-- Gráficos Section (Power BI) -->
+            <div class="dashboard-section" id="graficos-section" style="display: none;">
+                <h5 class="section-title">
+                    <i class="fas fa-chart-area"></i>
+                    Análisis Gráfico - Power BI
+                </h5>
+                
+                <div class="powerbi-placeholder">
+                    <div class="powerbi-icon">
+                        <i class="fab fa-microsoft"></i>
                     </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-3">
-                    <div class="dashboard-card stat-card">
-                        <div class="stat-number text-success">98.2%</div>
-                        <div class="stat-label">Eficiencia General</div>
-                        <div class="stat-trend trend-up">
-                            <i class="fas fa-arrow-up me-1"></i>+2.1%
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-3">
-                    <div class="dashboard-card stat-card">
-                        <div class="stat-number text-warning">24</div>
-                        <div class="stat-label">Operarios Activos</div>
-                        <div class="stat-trend">
-                            <i class="fas fa-minus me-1"></i>Sin cambios
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-3">
-                    <div class="dashboard-card stat-card">
-                        <div class="stat-number text-info">2.3h</div>
-                        <div class="stat-label">Tiempo Medio por Par</div>
-                        <div class="stat-trend trend-down">
-                            <i class="fas fa-arrow-down me-1"></i>-5.2%
-                        </div>
-                    </div>
+                    <h4>Integración con Power BI</h4>
+                    <p class="mb-0">Los gráficos de Power BI se cargarán aquí una vez configurada la integración.</p>
+                    <small class="text-muted mt-2">Embed URL: Configurar en la implementación</small>
                 </div>
             </div>
 
-            <!-- Production Progress -->
-            <div class="row mb-4">
-                <div class="col-lg-8 mb-4">
-                    <div class="dashboard-card">
-                        <h5 class="card-title">
-                            <i class="fas fa-tasks me-2"></i>
-                            Avance de Operaciones Clave
-                        </h5>
-
-                        <div class="progress-container corte">
-                            <div class="progress-label">
-                                <span class="operation-name">
-                                    <i class="fas fa-cut operation-icon"></i>
-                                    Corte
-                                </span>
-                                <span class="progress-value">85%</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar" style="--progress-width: 85%; width: 85%"></div>
-                            </div>
-                        </div>
-
-                        <div class="progress-container armado">
-                            <div class="progress-label">
-                                <span class="operation-name">
-                                    <i class="fas fa-hammer operation-icon"></i>
-                                    Armado
-                                </span>
-                                <span class="progress-value">72%</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar" style="--progress-width: 72%; width: 72%"></div>
-                            </div>
-                        </div>
-
-                        <div class="progress-container solador">
-                            <div class="progress-label">
-                                <span class="operation-name">
-                                    <i class="fas fa-shoe-prints operation-icon"></i>
-                                    Solador
-                                </span>
-                                <span class="progress-value">68%</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar" style="--progress-width: 68%; width: 68%"></div>
-                            </div>
-                        </div>
-
-                        <div class="progress-container emplantillado">
-                            <div class="progress-label">
-                                <span class="operation-name">
-                                    <i class="fas fa-layer-group operation-icon"></i>
-                                    Emplantillado
-                                </span>
-                                <span class="progress-value">91%</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar" style="--progress-width: 91%; width: 91%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 mb-4">
-                    <div class="dashboard-card production-overview">
-                        <h5 class="card-title">
-                            <i class="fas fa-chart-pie me-2"></i>
-                            Resumen de Producción
-                        </h5>
-                        <div class="text-center py-4">
-                            <div class="mb-4">
-                                <div style="font-size: 3rem; font-weight: bold;">79%</div>
-                                <div>Avance General del Día</div>
-                            </div>
-                            <div class="row text-center">
-                                <div class="col-6">
-                                    <div style="font-size: 1.5rem; font-weight: bold;">1,245</div>
-                                    <div style="font-size: 0.8rem;">Tareas Completadas</div>
+            <!-- Gestión Section -->
+            <div class="dashboard-section" id="gestion-section" style="display: none;">
+                <h5 class="section-title">
+                    <i class="fas fa-cogs"></i>
+                    Gestión de Proyectos
+                </h5>
+                
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+                                        <i class="fas fa-calendar-check text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="card-title mb-0">Indicador de avance diario</h6>
+                                        <small class="text-muted">Seguimiento en tiempo real</small>
+                                    </div>
                                 </div>
-                                <div class="col-6">
-                                    <div style="font-size: 1.5rem; font-weight: bold;">335</div>
-                                    <div style="font-size: 0.8rem;">Tareas Pendientes</div>
+                                <div class="progress mb-2" style="height: 8px;">
+                                    <div class="progress-bar" style="width: 45%"></div>
                                 </div>
+                                <small class="text-muted">300 pares completados hoy</small>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- PowerBI Integration Placeholder -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="dashboard-card">
-                        <h5 class="card-title">
-                            <i class="fas fa-chart-line me-2"></i>
-                            Gráficos de Producción - PowerBI
-                        </h5>
-                        <div class="text-center py-5">
-                            <i class="fab fa-microsoft fa-4x text-primary mb-3"></i>
-                            <h4 class="text-muted">Integración con PowerBI</h4>
-                            <p class="text-muted">
-                                Aquí se integrarán los reportes y gráficos de PowerBI<br>
-                                para mostrar análisis detallados de la producción
-                            </p>
-                            <div class="mt-4">
-                                <div class="badge bg-info me-2">Reportes en Tiempo Real</div>
-                                <div class="badge bg-success me-2">Análisis Predictivo</div>
-                                <div class="badge bg-warning">KPIs Personalizados</div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-success bg-opacity-10 p-3 rounded-circle me-3">
+                                        <i class="fas fa-clock text-success"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="card-title mb-0">Días aproximados restantes</h6>
+                                        <small class="text-muted">Estimación de entrega</small>
+                                    </div>
+                                </div>
+                                <h3 class="text-success mb-0">12 días</h3>
+                                <small class="text-muted">Para completar el lote actual</small>
                             </div>
                         </div>
                     </div>
@@ -557,62 +352,151 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
-        function setActive(element) {
-            document.querySelectorAll('.sidebar-link').forEach(link => {
-                link.classList.remove('active');
-            });
-            element.classList.add('active');
+        const MOBILE_BREAKPOINT = 768;
+
+        const toggleBtn   = document.getElementById('toggleBtn');
+        const sidebar     = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+
+        /* >>> funciones para escritorio (hover) */
+        function expandSidebar() {
+            sidebar.classList.remove('collapsed');
+            mainContent.classList.remove('expanded');
+        }
+        function collapseSidebar() {
+            sidebar.classList.add('collapsed');
+            mainContent.classList.add('expanded');
         }
 
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('mobile-open');
-        }
+        /* >>> configuración responsiva */
+        function setupLayout() {
+            const isDesktop = window.innerWidth > MOBILE_BREAKPOINT;
 
-        // Cerrar sidebar en mobile al hacer click fuera
-        document.addEventListener('click', function (event) {
-            const sidebar = document.getElementById('sidebar');
-            const toggle = document.querySelector('.mobile-toggle');
+            // Limpia estados previos
+            sidebar.removeEventListener('mouseenter', expandSidebar);
+            sidebar.removeEventListener('mouseleave', collapseSidebar);
 
-            if (window.innerWidth <= 768) {
-                if (!sidebar.contains(event.target) && !toggle.contains(event.target)) {
-                    sidebar.classList.remove('mobile-open');
-                }
+            if (isDesktop) {
+                // Escritorio: sin botón, sidebar colapsada por defecto y expande con hover
+                collapseSidebar();
+                // El botón visualmente ya se oculta por CSS; adicionalmente prevenimos uso accidental
+                if (toggleBtn) toggleBtn.style.pointerEvents = 'none';
+
+                sidebar.addEventListener('mouseenter', expandSidebar);
+                sidebar.addEventListener('mouseleave', collapseSidebar);
+
+                // Asegura que no quede "show" (off-canvas) activo de móvil
+                sidebar.classList.remove('show');
+            } else {
+                // Móvil: sidebar off-canvas; botón visible y funcional
+                sidebar.classList.remove('collapsed');
+                mainContent.classList.remove('expanded');
+                if (toggleBtn) toggleBtn.style.pointerEvents = 'auto';
             }
+        }
+
+        // Toggle solo en móvil
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function () {
+                if (window.innerWidth <= MOBILE_BREAKPOINT) {
+                    sidebar.classList.toggle('show');
+                }
+            });
+        }
+
+        // Navegación entre secciones (sin cambios)
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.dashboard-section');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                sections.forEach(section => section.style.display = 'none');
+                const targetSection = this.getAttribute('data-section') + '-section';
+                const section = document.getElementById(targetSection);
+                if (section) section.style.display = 'block';
+            });
         });
 
-        // Manejar resize de ventana
-        window.addEventListener('resize', function () {
-            const sidebar = document.getElementById('sidebar');
-            if (window.innerWidth > 768) {
-                sidebar.classList.remove('mobile-open');
-            }
-        });
-
-        // Simular actualización de datos en tiempo real
-        function updateProgress() {
-            const operations = [
-                { name: 'corte', min: 80, max: 90 },
-                { name: 'armado', min: 65, max: 80 },
-                { name: 'solador', min: 60, max: 75 },
-                { name: 'emplantillado', min: 85, max: 95 }
-            ];
-
-            operations.forEach(op => {
-                const progressBar = document.querySelector(`.${op.name} .progress-bar`);
-                const progressValue = document.querySelector(`.${op.name} .progress-value`);
-
-                if (progressBar && progressValue) {
-                    const newValue = Math.floor(Math.random() * (op.max - op.min + 1)) + op.min;
-                    progressBar.style.width = newValue + '%';
-                    progressValue.textContent = newValue + '%';
-                }
+        // Filtros (igual que antes)
+        function aplicarFiltros() {
+            const lote = document.getElementById('loteFilter').value;
+            const proveedor = document.getElementById('proveedorFilter').value;
+            const loteActual = document.getElementById('loteActual');
+            loteActual.textContent = lote ? `Lote # ${lote}` : 'Todos los lotes';
+            console.log('Filtros aplicados:', { lote, proveedor });
+            actualizarTablaOperaciones(lote, proveedor);
+            mostrarMensaje('Filtros aplicados correctamente', 'success');
+        }
+        function limpiarFiltros() {
+            document.getElementById('loteFilter').value = '';
+            document.getElementById('proveedorFilter').value = '';
+            document.getElementById('loteActual').textContent = 'Todos los lotes';
+            actualizarTablaOperaciones('', '');
+            mostrarMensaje('Filtros limpiados', 'info');
+        }
+        function actualizarTablaOperaciones(lote, proveedor) {
+            const operacionesData = {
+                '19': [
+                    { nombre: 'Corte', estado: 'realizado', progreso: 100 },
+                    { nombre: 'Armado', estado: 'progreso', progreso: 65 },
+                    { nombre: 'Solador', estado: 'inicio', progreso: 55 },
+                    { nombre: 'Emplantillado', estado: 'pendiente', progreso: 50 }
+                ],
+                '18': [
+                    { nombre: 'Corte', estado: 'realizado', progreso: 100 },
+                    { nombre: 'Armado', estado: 'realizado', progreso: 100 },
+                    { nombre: 'Solador', estado: 'progreso', progreso: 80 },
+                    { nombre: 'Emplantillado', estado: 'inicio', progreso: 25 }
+                ]
+            };
+            const data = operacionesData[lote] || operacionesData['19'];
+            const tableBody = document.getElementById('operacionesTable');
+            tableBody.innerHTML = '';
+            data.forEach(op => {
+                const row = document.createElement('tr');
+                const estadoClass = `status-${op.estado}`;
+                const estadoText = {
+                    'realizado': 'Completado',
+                    'progreso': 'En progreso',
+                    'inicio': 'Por iniciar',
+                    'pendiente': 'Pendiente'
+                };
+                row.innerHTML = `
+                    <td class="fw-semibold">${op.nombre}</td>
+                    <td>${op.estado === 'inicio' ? `<span class="status-badge ${estadoClass}">${estadoText[op.estado]}</span>` : '-'}</td>
+                    <td>${op.estado === 'pendiente' ? '<i class="fas fa-exclamation-triangle text-warning"></i>' : '-'}</td>
+                    <td>${op.estado === 'progreso' ? '<i class="fas fa-clock text-warning"></i>' : '-'}</td>
+                    <td>${op.estado === 'realizado' ? '<i class="fas fa-check-circle text-success"></i>' : '-'}</td>
+                    <td>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar" style="width: ${op.progreso}%">${op.progreso}%</div>
+                        </div>
+                    </td>
+                `;
+                tableBody.appendChild(row);
             });
         }
+        function mostrarMensaje(mensaje, tipo) {
+            const toast = document.createElement('div');
+            toast.className = `alert alert-${tipo} alert-dismissible fade show position-fixed`;
+            toast.style.cssText = 'top: 20px; right: 20px; z-index: 1050; min-width: 300px;';
+            toast.innerHTML = `
+                ${mensaje}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 3000);
+        }
 
-        // Actualizar cada 30 segundos
-        setInterval(updateProgress, 30000);
+        // Inicializa
+        window.addEventListener('load', function() {
+            setupLayout(); /* >>> configura móvil/escritorio */
+            actualizarTablaOperaciones('19', '');
+        });
+        window.addEventListener('resize', setupLayout); /* >>> reconfigura al cambiar tamaño */
     </script>
 </body>
-
 </html>
